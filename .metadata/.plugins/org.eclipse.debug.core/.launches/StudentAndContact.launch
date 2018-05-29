@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
+<listEntry value="/SalesforceSoapConnector/StudentAndContact.java"/>
+</listAttribute>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
+<listEntry value="1"/>
+</listAttribute>
+<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="StudentAndContact"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="https://login.salesforce.com/services/Soap/c/42.0/0DF7F000000g6kx"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="SalesforceSoapConnector"/>
+</launchConfiguration>

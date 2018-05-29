@@ -1,0 +1,127 @@
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.InputStreamReader;
+import java.io.IOException;
+import java.util.*;
+import java.lang.*;
+import com.sforce.soap.enterprise.DeleteResult;
+import com.sforce.soap.enterprise.DescribeGlobalResult;
+import com.sforce.soap.enterprise.DescribeGlobalSObjectResult;
+import com.sforce.soap.enterprise.DescribeSObjectResult;
+import com.sforce.soap.enterprise.EnterpriseConnection;
+import com.sforce.soap.enterprise.Error;
+import com.sforce.soap.enterprise.Field;
+import com.sforce.soap.enterprise.FieldType;
+import com.sforce.soap.enterprise.GetUserInfoResult;
+import com.sforce.soap.enterprise.LoginResult;
+import com.sforce.soap.enterprise.PicklistEntry;
+import com.sforce.soap.enterprise.QueryResult;
+import com.sforce.soap.enterprise.SaveResult;
+import com.sforce.soap.enterprise.sobject.Contact;
+import com.sforce.soap.enterprise.sobject.Student__c;
+import com.sforce.soap.enterprise.sobject.Class__c;
+import com.sforce.soap.enterprise.sobject.SObject;
+import com.sforce.ws.ConnectorConfig;
+import com.sforce.ws.ConnectionException;
+public class StudentAndContact {
+	EnterpriseConnection connection;
+	private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+	String authEndPoint = "";
+	public static void main(String args[]){
+		if (args.length < 1) {
+	         System.out.println("Usage: com.example.samples."
+	               + "QuickstartApiSamples <AuthEndPoint>");
+
+	         System.exit(-1);
+		}
+		StudentAndContact scon = new StudentAndContact(args[0]);
+		scon.login();
+		scon.createStudents();
+	}
+	
+   public StudentAndContact(String authEndPoint) {
+      this.authEndPoint = authEndPoint;
+   }
+	
+	private String getUserInput(String prompt){
+		String result = "";
+		try{
+			System.out.print(prompt);
+			result = reader.readLine();
+		}catch(IOException ioe){
+			ioe.printStackTrace();
+		}
+		return result;
+	}
+	
+	private boolean login(){
+		Boolean success = false;
+		String username = getUserInput("Enter username : ");
+		String password = getUserInput("Enter password : ");
+		try{
+			ConnectorConfig config = new ConnectorConfig();
+			config.setUsername(username);
+			config.setPassword(password);
+			System.out.println("Auth End Point : " + authEndPoint);
+			config.setAuthEndpoint(authEndPoint);
+			connection = new EnterpriseConnection(config);
+			printUserInfo(config);
+			success = true;
+		}catch(ConnectionException ce){
+			ce.printStackTrace();
+		}
+		return success;
+	}
+	
+	private void printUserInfo(ConnectorConfig config) {
+	      try {
+	         GetUserInfoResult userInfo = connection.getUserInfo();
+
+	         System.out.println("\nLogging in ...\n");
+	         System.out.println("UserID: " + userInfo.getUserId());
+	         System.out.println("User Full Name: " + userInfo.getUserFullName());
+	         System.out.println("User Email: " + userInfo.getUserEmail());
+	         System.out.println();
+	         System.out.println("SessionID: " + config.getSessionId());
+	         System.out.println("Auth End Point: " + config.getAuthEndpoint());
+	         System.out
+	               .println("Service End Point: " + config.getServiceEndpoint());
+	         System.out.println();
+	      } catch (ConnectionException ce) {
+	         ce.printStackTrace();
+	      }
+	   }
+
+	   private void logout() {
+	      try {
+	         connection.logout();
+	         System.out.println("Logged out.");
+	      } catch (ConnectionException ce) {
+	         ce.printStackTrace();
+	      }
+	   }
+	   
+	   private boolean createStudents(){
+		   try{
+			   double numberOfStudents = Double.valueOf(getUserInput("Enter number of Students : "));
+			   Class__c dummyClass = new Class__c();
+			   dummyClass.setClassName__c("WSDL Connection Dummy Class");
+			   dummyClass.setMaxSize__c(numberOfStudents);
+			   dummyClass.setBoard__c("CBSE");
+			   SaveResult[] result = connection.create(new Class__c[]{dummyClass}); 
+			   ArrayList<Student__c> students = new ArrayList<Student__c>();
+			   for(int i = 0; i < numberOfStudents; i++){
+				   Student__c student = new Student__c();
+				   student.setName(getUserInput("Enter Student Name : "));
+				   DateFormat format = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
+				   student.setDOB__c(getUserInput("Enter BirthDate"))
+			   }
+		   }catch(ConnectionException ce){
+			   ce.printStackTrace();
+			   
+		   }
+		   
+	   }
+	
+
+}
