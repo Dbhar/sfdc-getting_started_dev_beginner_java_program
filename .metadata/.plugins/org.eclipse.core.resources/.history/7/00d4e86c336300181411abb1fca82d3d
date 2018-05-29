@@ -145,11 +145,6 @@ public class StudentAndContact {
 						   Contact contact = (Contact)records[i];
 						   System.out.println("Contact : " + contact.getName());
 					   }
-					   if(query.isDone()){
-						   done = true;
-					   }else{
-						   query = connection.queryMore(query.getQueryLocator());
-					   }
 				   }
 			   }
 		   }catch(ConnectionException ce){

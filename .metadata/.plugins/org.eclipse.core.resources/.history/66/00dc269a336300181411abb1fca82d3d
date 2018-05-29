@@ -150,6 +150,7 @@ public class StudentAndContact {
 					   }else{
 						   query = connection.queryMore(query.getQueryLocator());
 					   }
+					   
 				   }
 			   }
 		   }catch(ConnectionException ce){
